@@ -1,0 +1,8 @@
+[package]
+
+name = "mersenne-twister"
+version = "0.0.1"
+authors = ["KokaKiwi <kokakiwi@kokakiwi.net>"]
+
+[dependencies]
+rand = "*"
