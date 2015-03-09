@@ -1,6 +1,11 @@
 [package]
 
 name = "mersenne-twister"
+description = "Rust implementation of Mersenne Twister RNG algorithm"
+license = "MIT"
+homepage = "https://github.com/KokaKiwi/rust-mersenne-twister"
+repository = "https://github.com/KokaKiwi/rust-mersenne-twister"
+documentation = "http://kokakiwi.github.io/rust-mersenne-twister/doc/mersenne-twister/index.html"
 version = "0.0.1"
 authors = ["KokaKiwi <kokakiwi@kokakiwi.net>"]
 
