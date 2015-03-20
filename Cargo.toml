@@ -1,15 +1,16 @@
 [package]
 
-name = "mersenne-twister"
+name = "rand-mersenne-twister"
 description = "Rust implementation of Mersenne Twister PRNG algorithm"
 license = "MIT"
 homepage = "https://github.com/KokaKiwi/rust-mersenne-twister"
 repository = "https://github.com/KokaKiwi/rust-mersenne-twister"
 documentation = "http://kokakiwi.github.io/rust-mersenne-twister/doc/mersenne-twister/index.html"
 readme = "README.md"
-keywords = ["random", "rng", "algorithm"]
+keywords = ["random", "rng", "algorithm", "mersenne-twister"]
 version = "0.1.0"
 authors = ["KokaKiwi <kokakiwi@kokakiwi.net>"]
 
 [dependencies]
 rand = "*"
+
