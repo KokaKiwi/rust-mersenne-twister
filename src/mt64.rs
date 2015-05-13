@@ -25,6 +25,7 @@ const DEFAULT_SEED: u64 = 5489;
 const UPPER_MASK: u64 = 0xFFFFFFFF80000000;
 const LOWER_MASK: u64 = !UPPER_MASK;
 
+#[derive(Copy)]
 pub struct MTRng64 {
     state: [u64; N],
     index: usize,
@@ -140,7 +141,11 @@ impl MTRng64 {
     }
 }
 
-impl Copy for MTRng64 {}
+impl Clone for MTRng64 {
+	fn clone(&self) -> Self {
+		*self
+	}
+}
 
 impl Rng for MTRng64 {
     fn next_u32(&mut self) -> u32 {
