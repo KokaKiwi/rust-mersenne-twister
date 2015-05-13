@@ -213,10 +213,10 @@ mod test {
 
     #[test]
     fn test_vector() {
-        let mut rng: MTRng64 = SeedableRng::from_seed([0x12345, 0x23456, 0x34567, 0x45678].as_slice());
-        let values: Vec<_> = rng.gen_iter().take(TEST_VECTOR.len()).collect();
+        let mut rng: MTRng64 = SeedableRng::from_seed(&[0x12345, 0x23456, 0x34567, 0x45678][..]);
+        let values: Vec<u64> = rng.gen_iter().take(TEST_VECTOR.len()).collect();
 
-        assert_eq!(values.as_slice(), TEST_VECTOR.as_slice());
+        assert_eq!(&values[..], &TEST_VECTOR[..]);
     }
 
     #[bench]
