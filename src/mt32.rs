@@ -24,6 +24,7 @@ const DEFAULT_SEED: u32 = 5489;
 const UPPER_MASK: u32 = 1 << 31;
 const LOWER_MASK: u32 = !UPPER_MASK;
 
+#[derive(Copy)]
 pub struct MTRng32 {
     state: [u32; N],
     index: usize,
@@ -140,7 +141,11 @@ impl MTRng32 {
     }
 }
 
-impl Copy for MTRng32 {}
+impl Clone for MTRng32 {
+	fn clone(&self) -> Self {
+		*self
+	}
+}
 
 impl Rng for MTRng32 {
     fn next_u32(&mut self) -> u32 {
@@ -202,10 +207,10 @@ mod test {
 
     #[test]
     fn test_vector() {
-        let mut rng: MTRng32 = SeedableRng::from_seed([0x123, 0x234, 0x345, 0x456].as_slice());
-        let values: Vec<_> = rng.gen_iter().take(TEST_VECTOR.len()).collect();
+        let mut rng: MTRng32 = SeedableRng::from_seed(&[0x123, 0x234, 0x345, 0x456][..]);
+        let values: Vec<u32> = rng.gen_iter().take(TEST_VECTOR.len()).collect();
 
-        assert_eq!(values.as_slice(), TEST_VECTOR.as_slice());
+        assert_eq!(&values[..], &TEST_VECTOR[..]);
     }
 
     #[bench]

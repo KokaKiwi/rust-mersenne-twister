@@ -25,6 +25,7 @@ const DEFAULT_SEED: u64 = 5489;
 const UPPER_MASK: u64 = 0xFFFFFFFF80000000;
 const LOWER_MASK: u64 = !UPPER_MASK;
 
+#[derive(Copy)]
 pub struct MTRng64 {
     state: [u64; N],
     index: usize,
@@ -140,7 +141,11 @@ impl MTRng64 {
     }
 }
 
-impl Copy for MTRng64 {}
+impl Clone for MTRng64 {
+	fn clone(&self) -> Self {
+		*self
+	}
+}
 
 impl Rng for MTRng64 {
     fn next_u32(&mut self) -> u32 {
@@ -208,10 +213,10 @@ mod test {
 
     #[test]
     fn test_vector() {
-        let mut rng: MTRng64 = SeedableRng::from_seed([0x12345, 0x23456, 0x34567, 0x45678].as_slice());
-        let values: Vec<_> = rng.gen_iter().take(TEST_VECTOR.len()).collect();
+        let mut rng: MTRng64 = SeedableRng::from_seed(&[0x12345, 0x23456, 0x34567, 0x45678][..]);
+        let values: Vec<u64> = rng.gen_iter().take(TEST_VECTOR.len()).collect();
 
-        assert_eq!(values.as_slice(), TEST_VECTOR.as_slice());
+        assert_eq!(&values[..], &TEST_VECTOR[..]);
     }
 
     #[bench]
