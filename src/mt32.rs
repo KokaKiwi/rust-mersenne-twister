@@ -24,7 +24,6 @@ const DEFAULT_SEED: u32 = 5489;
 const UPPER_MASK: u32 = 1 << 31;
 const LOWER_MASK: u32 = !UPPER_MASK;
 
-#[derive(Copy)]
 pub struct MTRng32 {
     state: [u32; N],
     index: usize,
