@@ -25,6 +25,7 @@ const DEFAULT_SEED: u64 = 5489;
 const UPPER_MASK: u64 = 0xFFFFFFFF80000000;
 const LOWER_MASK: u64 = !UPPER_MASK;
 
+#[derive(Copy)]
 pub struct MTRng64 {
     state: [u64; N],
     index: usize,
