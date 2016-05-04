@@ -1,2 +1,7 @@
+# Rust stuff
 target
 Cargo.lock
+
+# Misc stuff
+.*
+!.gitignore

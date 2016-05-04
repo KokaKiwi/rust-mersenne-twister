@@ -3,7 +3,7 @@
 //! See [Mersenne Twister Homepage](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/emt19937ar.html)
 //! for more informations.
 use std::default::Default;
-use rand::{Rng, SeedableRng};
+use rand::{Rand, Rng, SeedableRng};
 
 const N: usize = 624;
 const M: usize = 397;
@@ -52,7 +52,7 @@ impl MTRng32 {
 
     fn reset(&mut self, seed: u32) {
         self.state[0] = seed;
-        for index in (1..N) {
+        for index in 1..N {
             let prec = self.state[index - 1];
 
             self.state[index] = MAGIC_VALUE1.wrapping_mul(prec ^ (prec >> 30)) + index as u32;
@@ -68,7 +68,7 @@ impl MTRng32 {
         let (mut i, mut j) = (1, 0);
 
         let size = max(N, seed.len());
-        for _ in (0..size) {
+        for _ in 0..size {
             let prec = self.state[i - 1];
             self.state[i] = (self.state[i] ^ ((prec ^ (prec >> 30)).wrapping_mul(MAGIC_FACTOR1))) + seed[j] + j as u32;
 
@@ -85,7 +85,7 @@ impl MTRng32 {
             }
         }
 
-        for _ in (0..N - 1) {
+        for _ in 0..N - 1 {
             let prec = self.state[i - 1];
             self.state[i] = (self.state[i] ^ ((prec ^ (prec >> 30)).wrapping_mul(MAGIC_FACTOR2))) - i as u32;
             i += 1;
@@ -140,7 +140,11 @@ impl MTRng32 {
     }
 }
 
-impl Copy for MTRng32 {}
+impl Rand for MTRng32 {
+    fn rand<R: Rng>(rng: &mut R) -> MTRng32 {
+        MTRng32::new(rng.gen())
+    }
+}
 
 impl Rng for MTRng32 {
     fn next_u32(&mut self) -> u32 {
@@ -176,9 +180,7 @@ impl Default for MTRng32 {
 
 #[cfg(test)]
 mod test {
-    use std::default::Default;
     use rand::{Rng, SeedableRng};
-    use test::Bencher;
     use super::MTRng32;
 
     const TEST_VECTOR: [u32; 80] = [
@@ -202,19 +204,9 @@ mod test {
 
     #[test]
     fn test_vector() {
-        let mut rng: MTRng32 = SeedableRng::from_seed([0x123, 0x234, 0x345, 0x456].as_slice());
-        let values: Vec<_> = rng.gen_iter().take(TEST_VECTOR.len()).collect();
+        let mut rng: MTRng32 = SeedableRng::from_seed(&[0x123u32, 0x234, 0x345, 0x456] as &[u32]);
+        let values: Vec<u32> = rng.gen_iter().take(TEST_VECTOR.len()).collect();
 
-        assert_eq!(values.as_slice(), TEST_VECTOR.as_slice());
-    }
-
-    #[bench]
-    fn bench_64k(b: &mut Bencher) {
-        let mut rng: MTRng32 = Default::default();
-        let mut buf: [u8; 64 * 1024] = unsafe { ::std::mem::uninitialized() };
-        b.iter(|| {
-            rng.fill_bytes(&mut buf);
-        });
-        b.bytes = buf.len() as u64;
+        assert_eq!(values, &TEST_VECTOR as &[u32]);
     }
 }
